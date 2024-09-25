@@ -6,14 +6,6 @@
 4. [¿Son lenguajes lentos?](#son-lenguajes-lentos)
 5. [Inserte título](#inserte-título)
 6. [Conceptos básicos](#conceptos-básicos)
-   - [JavaScript](#javascript)
-   - [DOM](#dom)
-     - [¿Para qué sirve?](#para-qué-sirve)
-   - [TypeScript](#typescript)
-     - [Traspilador](#traspilador)
-   - [NodeJS](#nodejs)
-   - [NPM](#npm)
-   - [Express](#express)
    - [API](#api)
    - [API REST](#api-rest)
    - [Endpoint](#endpoint)
@@ -24,6 +16,14 @@
    - [Rutas](#rutas)
    - [Middleware](#middleware)
    - [JSON](#json)
+   - [JavaScript](#javascript)
+   - [DOM](#dom)
+     - [¿Para qué sirve?](#para-qué-sirve)
+   - [TypeScript](#typescript)
+     - [Traspilador](#traspilador)
+   - [NodeJS](#nodejs)
+   - [NPM](#npm)
+   - [Express](#express)
    - [Prerequisitos](#prerequisitos-para-el-proyecto)
    - [¿Qué es un Linter](#linter)
 7. [Crear Proyecto](#crear-el-proyecto)
@@ -36,149 +36,6 @@ En este doc voy a concentrar conceptos básicos
 de backend sumado a cómo realizar una API
 haciendo uso de JavaScript, TypeScript y el
 framework de Express.
-
-## ¿Por qué JavaScript?
-
-Porque es un lenguaje sencillo dentro de todo,
-extremadamente flexible (incluso para mal), y
-moderno, además que se puede usar para front
-como back y es bastante usado de forma general.
-
-## ¿Por qué TypeScript?
-
-Porque JavaScript al ser demasiado flexible
-con tipado debil y dinámico a veces llegan a
-ocurrir cosas... Peculiares, y al no haber una
-revisión de código demasiada estricta aún cuando
-descargamos una herramienta para la revisión del
-código, implica que pueden haber cosas que salgan
-mal por tipado, y peor aún, que sea dificil de
-encontrar la causa, TypeScript al agregarle tipado
-estricto como los de otros lenguajes quita esto,
-permitiendo permitir el uso del tipado de JavaScript
-de ser necesario.
-
-## ¿Son lenguajes lentos?
-
-Si, al ser lenguajes interpretados pueden ser más
-lentos que otros como C y Java, pero como vamos
-a hacer CRUD y las consultas de datos o calculos
-de los reportes pretendo que las haga la BD con
-querys, creo que puedo darme el lujo de la practicidad
-de estos lenguajes.
-
-Si van a hacer cálculos con JavaScript, investiguen
-si hay una libreria que permita calculos presisos,
-porque JavaScript es pésimo redondeando decimales o
-haciendo cálculos exactos en general.
-
-## Inserte título
-
-Los conceptos básicos si son bastantes, leanlo
-con calma y no se los echen de una, lo puse
-lo más resumido y sencillo que pude.
-
-## Conceptos básicos
-
-### JavaScript
-
-JavaScript es un lenguaje de programación que
-se utiliza principalmente para agregar interactividad
-a las páginas web. Es un lenguaje del lado del cliente,
-lo que significa que se ejecuta en el navegador web,
-permitiendo crear sitios web dinámicos.
-
-- **Características:**
-  - Dinámico y basado en eventos.
-  - Soporte para el paradigma de programación orientada
-    a objetos y funcional.
-  - Utilizado para manipular el DOM (Document Object
-    Model), lo que permite cambiar el contenido de una
-    página sin recargarla.
-
-### DOM
-
-El DOM (Document Object Model) es una representación
-estructurada de una página web en forma de árbol, donde
-cada parte del contenido (como elementos HTML, atributos,
-y texto) se convierte en un nodo dentro de este árbol.
-
-#### ¿Para qué sirve?
-
-El DOM permite que los lenguajes de programación, como
-JavaScript, interactúen con la estructura de una página
-web. Gracias al DOM, puedes acceder y modificar el
-contenido, el diseño y la estructura de una página HTML
-de manera dinámica
-
-### TypeScript
-
-TypeScript es un superset de JavaScript, lo que significa
-que amplía las funcionalidades de JavaScript agregando
-tipado estático. Esto permite definir los tipos de datos
-de las variables y las funciones, además agrega tipos como
-clases abstractas o interfaces lo que facilita el desarrollo
-de aplicaciones grandes y reduce errores.
-
-- **Características:**
-  - El código TypeScript se "transpila" a JavaScript.
-  - Añade tipos estáticos (como string, number, etc.),
-    interfaces y clases.
-  - Facilita el mantenimiento de grandes proyectos.
-
-#### Traspilador
-
-Un transpilador es un software que traduce
-un código fuente a otro código fuente haciendo validaciones
-en el proceso.
-
-Podría decirse erroneamente que TypeScript se "compila" a
-JavaScript, pero recordemos que en si compilar es pasarlo
-a lenguaje máquina, aquí sólo se queda en código de JS.
-
-### NodeJS
-
-Node.js es un entorno de ejecución de JavaScript del lado
-del servidor. Permite ejecutar código JavaScript fuera del
-navegador, lo que lo hace ideal para crear aplicaciones del
-lado del servidor, como APIs, servidores web, o herramientas
-de línea de comandos.
-
-- Características:
-  - Basado en el motor V8 de Google Chrome.
-  - Asíncrono y basado en eventos, lo que lo hace altamente
-    eficiente para manejar múltiples solicitudes simultáneamente.
-  - Tiene acceso a archivos del sistema, bases de datos y
-    redes, algo que JavaScript en el navegador no tiene.
-
-### NPM
-
-npm (Node Package Manager) es el gestor de paquetes para
-Node.js. Permite instalar, actualizar y gestionar
-dependencias (bibliotecas, frameworks, etc.) que tu proyecto
-necesita para funcionar.
-
-Existen más gestores de paquetes para Node.js
-
-- **Características:**
-  - Acceso a un repositorio enorme de módulos y paquetes.
-  - Facilita la instalación de librerías y su integración
-    en proyectos Node.js.
-  - Incluye scripts para automatizar tareas de desarrollo
-    (compilación, pruebas, etc.).
-
-### Express
-
-Express es un framework minimalista para Node.js, utilizado
-para crear aplicaciones web y APIs de manera rápida y eficiente.
-Se encarga de gestionar rutas, solicitudes y respuestas HTTP,
-y de servir archivos estáticos o dinámicos.
-
-- Características:
-  - Simplifica la creación de aplicaciones web y APIs RESTful.
-  - Soporta middleware, que permite interceptar y procesar las
-    solicitudes HTTP antes de enviarlas a los controladores.
-  - Extensible con múltiples plugins y bibliotecas.
 
 ### API
 
@@ -576,6 +433,185 @@ Guardar la respuesta en un archivo con `-o`
 curl https://api.ejemplo.com/datos -o respuesta.json
 ```
 
+A partir de aquí les empezaré a explicar
+conceptos básicos sobre el framework y la
+tecnología que voy a utilizar, pero por
+si se les hace tentativo. Les muestro
+un ejemplo de cómo queda el código de una
+api que les permite enviar texto al servidor
+y este les responde con un `pong`. Este
+es el "hola mundo" de un servidor llamado
+`ping pong`.
+
+```javascript
+// archivo: servidor.js
+// Importar express
+const express = require("express");
+const app = express();
+const PORT = 3000; // Puerto en el que escuchará el servidor
+
+// Definir la ruta para "ping"
+app.get("/ping", (req, res) => {
+  res.send("pong");
+});
+
+// Iniciar el servidor
+app.listen(PORT, () => {
+  console.log(`Servidor de ping-pong ejecutándose en http://localhost:${PORT}`);
+});
+```
+
+Ejemplo de cómo consulto mi servidor y la
+respuesta
+
+```bash
+curl 'http://localhost:3000/ping'
+pong
+```
+
+## ¿Por qué JavaScript?
+
+Porque es un lenguaje sencillo dentro de todo,
+extremadamente flexible (incluso para mal), y
+moderno, además que se puede usar para front
+como back y es bastante usado de forma general.
+
+## ¿Por qué TypeScript?
+
+Porque JavaScript al ser demasiado flexible
+con tipado debil y dinámico a veces llegan a
+ocurrir cosas... Peculiares, y al no haber una
+revisión de código demasiada estricta aún cuando
+descargamos una herramienta para la revisión del
+código, implica que pueden haber cosas que salgan
+mal por tipado, y peor aún, que sea dificil de
+encontrar la causa, TypeScript al agregarle tipado
+estricto como los de otros lenguajes quita esto,
+permitiendo permitir el uso del tipado de JavaScript
+de ser necesario.
+
+## ¿Son lenguajes lentos?
+
+Si, al ser lenguajes interpretados pueden ser más
+lentos que otros como C y Java, pero como vamos
+a hacer CRUD y las consultas de datos o calculos
+de los reportes pretendo que las haga la BD con
+querys, creo que puedo darme el lujo de la practicidad
+de estos lenguajes.
+
+Si van a hacer cálculos con JavaScript, investiguen
+si hay una libreria que permita calculos presisos,
+porque JavaScript es pésimo redondeando decimales o
+haciendo cálculos exactos en general.
+
+## Inserte título
+
+Los conceptos básicos si son bastantes, leanlo
+con calma y no se los echen de una, lo puse
+lo más resumido y sencillo que pude.
+
+## Conceptos básicos
+
+### JavaScript
+
+JavaScript es un lenguaje de programación que
+se utiliza principalmente para agregar interactividad
+a las páginas web. Es un lenguaje del lado del cliente,
+lo que significa que se ejecuta en el navegador web,
+permitiendo crear sitios web dinámicos.
+
+- **Características:**
+  - Dinámico y basado en eventos.
+  - Soporte para el paradigma de programación orientada
+    a objetos y funcional.
+  - Utilizado para manipular el DOM (Document Object
+    Model), lo que permite cambiar el contenido de una
+    página sin recargarla.
+
+### DOM
+
+El DOM (Document Object Model) es una representación
+estructurada de una página web en forma de árbol, donde
+cada parte del contenido (como elementos HTML, atributos,
+y texto) se convierte en un nodo dentro de este árbol.
+
+#### ¿Para qué sirve?
+
+El DOM permite que los lenguajes de programación, como
+JavaScript, interactúen con la estructura de una página
+web. Gracias al DOM, puedes acceder y modificar el
+contenido, el diseño y la estructura de una página HTML
+de manera dinámica
+
+### TypeScript
+
+TypeScript es un superset de JavaScript, lo que significa
+que amplía las funcionalidades de JavaScript agregando
+tipado estático. Esto permite definir los tipos de datos
+de las variables y las funciones, además agrega tipos como
+clases abstractas o interfaces lo que facilita el desarrollo
+de aplicaciones grandes y reduce errores.
+
+- **Características:**
+  - El código TypeScript se "transpila" a JavaScript.
+  - Añade tipos estáticos (como string, number, etc.),
+    interfaces y clases.
+  - Facilita el mantenimiento de grandes proyectos.
+
+#### Traspilador
+
+Un transpilador es un software que traduce
+un código fuente a otro código fuente haciendo validaciones
+en el proceso.
+
+Podría decirse erroneamente que TypeScript se "compila" a
+JavaScript, pero recordemos que en si compilar es pasarlo
+a lenguaje máquina, aquí sólo se queda en código de JS.
+
+### NodeJS
+
+Node.js es un entorno de ejecución de JavaScript del lado
+del servidor. Permite ejecutar código JavaScript fuera del
+navegador, lo que lo hace ideal para crear aplicaciones del
+lado del servidor, como APIs, servidores web, o herramientas
+de línea de comandos.
+
+- Características:
+  - Basado en el motor V8 de Google Chrome.
+  - Asíncrono y basado en eventos, lo que lo hace altamente
+    eficiente para manejar múltiples solicitudes simultáneamente.
+  - Tiene acceso a archivos del sistema, bases de datos y
+    redes, algo que JavaScript en el navegador no tiene.
+
+### NPM
+
+npm (Node Package Manager) es el gestor de paquetes para
+Node.js. Permite instalar, actualizar y gestionar
+dependencias (bibliotecas, frameworks, etc.) que tu proyecto
+necesita para funcionar.
+
+Existen más gestores de paquetes para Node.js
+
+- **Características:**
+  - Acceso a un repositorio enorme de módulos y paquetes.
+  - Facilita la instalación de librerías y su integración
+    en proyectos Node.js.
+  - Incluye scripts para automatizar tareas de desarrollo
+    (compilación, pruebas, etc.).
+
+### Express
+
+Express es un framework minimalista para Node.js, utilizado
+para crear aplicaciones web y APIs de manera rápida y eficiente.
+Se encarga de gestionar rutas, solicitudes y respuestas HTTP,
+y de servir archivos estáticos o dinámicos.
+
+- Características:
+  - Simplifica la creación de aplicaciones web y APIs RESTful.
+  - Soporta middleware, que permite interceptar y procesar las
+    solicitudes HTTP antes de enviarlas a los controladores.
+  - Extensible con múltiples plugins y bibliotecas.
+
 ## Prerequisitos para el proyecto
 
 1. Editor de código, recomendación, VSCode, extenciones
@@ -823,26 +859,28 @@ npm install express -E
 
 El argumento `-E` en npm se utiliza para instalar paquetes de
 Node.js con la versión exacta que se especifica. Al usar `-E`,
-npm instala el paquete sin permitir que se resuelvan las 
+npm instala el paquete sin permitir que se resuelvan las
 versiones de forma flexible.
 
 - Si no especificas `-E`, npm podría instalar la última versión
-disponible, lo que y si existen librerias o dependencias que no
-son compatibles con esa versión o cambiaron en algo, tendríamos
-un problema, por ahora deberíamos estar usando la última versión
-pero usar `-E` es buena práctica.
+  disponible, lo que y si existen librerias o dependencias que no
+  son compatibles con esa versión o cambiaron en algo, tendríamos
+  un problema, por ahora deberíamos estar usando la última versión
+  pero usar `-E` es buena práctica.
 
-- Sin embargo, en las versiones más recientes de npm, el uso de 
-`-E` se vuelve menos común, ya que se ha mejorado la gestión de 
-versiones en package.json. Si realmente necesitas un control 
-estricto sobre las versiones, puedes simplemente definir la 
-versión exacta en el archivo package.json sin necesidad de usar 
-`-E`.
+- Sin embargo, en las versiones más recientes de npm, el uso de
+  `-E` se vuelve menos común, ya que se ha mejorado la gestión de
+  versiones en package.json. Si realmente necesitas un control
+  estricto sobre las versiones, puedes simplemente definir la
+  versión exacta en el archivo package.json sin necesidad de usar
+  `-E`.
 
 ## El hola mundo de la API: PING PONG
+
 Ahora haremos el hola mundo de nuestra api, crearemos
 una carpeta `src` en la raiz de nuestro proyecto y
 crearemos un archivo `index.ts` y pondremos algo de código
+
 ```
 .
 ├── node_modules
@@ -855,4 +893,3 @@ crearemos un archivo `index.ts` y pondremos algo de código
 
 **Nota:** Si tu editor de código te marca errores no
 te asustes, en principio diremos cómo se solucionan.
-
