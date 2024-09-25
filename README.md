@@ -420,7 +420,7 @@ curl -X POST https://api.ejemplo.com/datos \
 -d '{"nombre": "Juan", "edad": 30}'
 ```
 
-Descargar archivos con `-o`
+Descargar archivos con `-O`
 
 ```bash
 curl -O https://ejemplo.com/archivo.zip
@@ -848,6 +848,37 @@ modulo.saludar(); // "Hola"
 - `"noFallthroughCasesInSwitch": true`: Los `switch` deben
   tener un `break` o `return` siempre
 
+## Linter para JS y TS
+
+```bash
+npm init @eslint/config@latest
+
+> express-ts@1.0.0 npx
+> create-config
+
+@eslint/create-config: v1.3.1
+
+✔ How would you like to use ESLint? · problems
+✔ What type of modules does your project use? · commonjs
+✔ Which framework does your project use? · none
+✔ Does your project use TypeScript? · typescript
+✔ Where does your code run? · browser
+The config that you've selected requires the following dependencies:
+
+eslint, globals, @eslint/js, typescript-eslint
+✔ Would you like to install them now? · No / Yes
+✔ Which package manager do you want to use? · npm
+☕️Installing...
+
+added 118 packages, and audited 120 packages in 14s
+
+34 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+Successfully created /home/rubenor/workspace/express-ts/eslint.config.mjs file.
+```
+
 ## Dependencias para crear la API
 
 Descargar `Express`
@@ -874,7 +905,184 @@ versiones de forma flexible.
   versión exacta en el archivo package.json sin necesidad de usar
   `-E`.
 
+## Pasar funciones como argumentos, funciones anónimas
+
+Toda función tiene memoria asignada desde que se define,
+por eso en C debiamos poner los prototipos de funciones
+al inicio del archivo, para que el compilador asigne esa
+memoria desde el inicio
+
+Existe algo llamado **apuntadores a funciones** estas
+son variables que referencían a la memoria de esa funcion
+
+```c
+#include <stdio.h>
+void funcion1() { printf("Hacer algo\n"); }
+
+// Decir que el argumento es func(void) es lo
+// mismo que decir func()
+void funcion2(void) { printf("Hacer algo diferente\n"); }
+
+int main() {
+  /* Definir un apuntador a funcion, donde
+   * el argumento es void, (no recibe argumentos)
+   * y su retorno es void
+   */
+  void (*funcion)(void);
+
+  // Puedo asignar a qué funcion se refiere
+  // de esta forma
+  funcion = funcion1;
+  // Y la llamo de esta forma
+  funcion();
+
+  funcion = funcion2;
+  funcion();
+}
+```
+
+La salida de este código es:
+
+```
+Hacer algo
+Hacer algo diferente
+```
+
+En C al menos, puedes incluso almacenar
+varias referencias de una función siempre
+que tengan el mismo retorno y argumentos, o
+eso hasta donde yo sé jajajaja
+
+Otro ejemplo más raro
+
+```c
+#include <stdio.h>
+void funcion1(int num, float otro_num) {
+  num *= 5;
+  otro_num = 2;
+
+  printf("Num: %d otro_num %.2f\n", num, otro_num);
+}
+
+void funcion2(int a, float b) { printf("Hola mundo\n"); }
+
+int main() {
+  // Definir un array que guarde 2 apuntadores a funciones
+  // que reciban (int, float) y retorne void
+  void (*array_funciones[2])(int, float) = {funcion1, funcion2};
+
+  // Incluso podemos iterar el array y llamar a la funcion
+  // aunque nos de resultados diferentes
+  for (int i = 1; i <= 2; i++) {
+    array_funciones[i - 1](i, 1.5);
+  }
+}
+```
+
+La salida es
+
+```
+Num: 5 otro_num 2.00
+Hola mundo
+```
+
+Bueno, se ve muy raro de escribir, y lo es, pero con Javascript
+es más sencillo, pero ahora entienden que si tienen `funcion1()`
+y ustedes solo escriben `funcion1` están haciendo una referencia
+a la funcion, y que esta referencia se puede guardar en una
+variable
+
+Ahora en javascript
+
+```javascript
+function funcion1() {
+  console.log("Hola mundo");
+}
+
+function funcion2(variable1, variable2) {
+  console.log(`Var1 ${variable1}, Var2 ${variable2}`);
+}
+
+const referencia = funcion1;
+
+referencia();
+
+const arrayFunciones = [funcion1, funcion2];
+
+console.log("\nRecorrer array\n");
+for (let i = 0; i < arrayFunciones.length; i++) {
+  arrayFunciones[i]();
+}
+```
+
+### Funciones anónimas
+
+Ahora imaginen que definimos una función sin nombre,
+podemos hacerlo, pero no tendremos como referrirnos
+a ella, a no ser, que usemos una referencia
+
+```javascript
+let referencia = function (var1, var2) {
+  console.log(`${var1} ${var2}`);
+};
+
+referencia("Hola mundo", 1.5);
+
+// Usamos una flecha para indicar una función
+// anónima
+referencia = (var1, var2) => {
+  console.log(`${var1} ${var2}`);
+};
+
+referencia(1, true);
+```
+
+La salida es
+
+```
+Hola mundo 1.5
+1 true
+```
+
+Entonces podemos definir un método que reciba
+como argumento un apuntador a funcion
+
+```javascript
+class App {
+  constructor() {}
+
+  get(ruta, funcionSolicitud) {
+    funcionSolicitud(`GET ${ruta}`, "Hello world");
+  }
+}
+
+const app = new App();
+
+console.log("-------- Forma 1 -------");
+
+app.get("/client", function (req, res) {
+  console.log(`Solicitud ${req}, Respuesta ${res}`);
+});
+
+console.log("-------- Forma 2 -------");
+app.get("/client", (req, res) => {
+  console.log(`Solicitud ${req}, Respuesta ${res}`);
+});
+```
+
+Salida
+
+```
+-------- Forma 1 -------
+Solicitud GET /client, Respuesta Hello world
+-------- Forma 2 -------
+Hola mundo
+Solicitud GET /client, Respuesta Hello world
+```
+
 ## El hola mundo de la API: PING PONG
+
+### Hola mundo
 
 Ahora haremos el hola mundo de nuestra api, crearemos
 una carpeta `src` en la raiz de nuestro proyecto y
