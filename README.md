@@ -51,8 +51,7 @@ de datos, el CRUD, pero brindaremos `enpoints` para que otra
 aplicaciòn, como la interfaz web, pueda consultar los datos de
 nuestra base de datos, de esta forma podríamos tener incluso
 la base de datos en un servidor, la api en otro y la plataforma
-web en otro distinto, o los 3 en el mismo servidor e incluso
-separados
+web en otro distinto, o los 3 en el mismo servidor.
 
 ### API REST
 
