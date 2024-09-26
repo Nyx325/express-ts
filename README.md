@@ -25,7 +25,8 @@ Si vas a desplegar este sistema en algún servidor y
 ya cuentas con `Node.js`.
 
 ```bash
-npm install --production
+npm install --omit=dev
+npm run build
 npm run start
 ```
 
@@ -37,6 +38,7 @@ npm run dev
 ```
 
 ## Notas
+
 Sí sólo vienes por las notas de Backend, recomiendo mirar las
 extenciones que recomiendo en [Creando un proyecto](./crear-proyecto.md#prerequisitos-para-el-proyecto) para VSCode.
 
