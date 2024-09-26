@@ -27,446 +27,12 @@
    - [Prerequisitos](#prerequisitos-para-el-proyecto)
    - [¿Qué es un Linter](#linter)
 7. [Crear Proyecto](#crear-el-proyecto)
-   - [Configurar TypeScript](#configuración-de-typescript)
+   - [Configurar TypeScript](#configurar-typescript)
+   - [Linter](#linter-para-js-y-ts)
    - [Dependencias API](#dependencias-para-crear-la-api)
-
-# Crear api con express, ts y js
-
-En este doc voy a concentrar conceptos básicos
-de backend sumado a cómo realizar una API
-haciendo uso de JavaScript, TypeScript y el
-framework de Express.
-
-### API
-
-Una API (Interfaz de Programación de Aplicaciones) es un
-conjunto de reglas y protocolos que permiten a diferentes
-aplicaciones o servicios comunicarse entre sí. En otras palabras,
-es una manera en la que un software puede interactuar con otro.
-Por ejemplo, una API puede permitir que una aplicación de terceros
-acceda a funciones o datos de otra aplicación.
-
-En este caso el plan es realizar una API que gestione la base
-de datos, el CRUD, pero brindaremos `enpoints` para que otra
-aplicaciòn, como la interfaz web, pueda consultar los datos de
-nuestra base de datos, de esta forma podríamos tener incluso
-la base de datos en un servidor, la api en otro y la plataforma
-web en otro distinto, o los 3 en el mismo servidor.
-
-### API REST
-
-Una API REST (Transferencia de Estado Representacional) es un
-tipo de API que utiliza el protocolo HTTP y sigue principios
-específicos de diseño. REST permite la comunicación entre un
-cliente y un servidor mediante recursos, que se identifican
-mediante URLs. Las APIs REST son ampliamente utilizadas debido
-a su simplicidad y eficiencia.
-
-### Endpoint
-
-Un endpoint (o "punto de acceso") es una URL específica en una
-API que representa un recurso o una acción en particular. Es el
-lugar donde se puede acceder a los recursos de la API, y cada
-endpoint está asociado a una operación que se puede realizar
-(como obtener, crear, actualizar o eliminar datos).
-
-- **Características:**
-  - **URL Específica:** Cada endpoint tiene una URL única que
-    lo identifica. Por ejemplo, en una API de gestión de usuarios,
-    un endpoint podría ser `/usuarios` para acceder a la lista de
-    usuarios. Una vez inicializada la API la forma de acceder al
-    endpoint deberia ser algo como `localhost:8080/usuarios` o
-    `danieltellez.net/usuarios`.
-  - **Métodos HTTP:** Los endpoints responden a diferentes métodos
-    HTTP, como GET, POST, PUT y DELETE, que indican la acción que
-    se desea realizar en el recurso.
-  - **Recursos:** Cada endpoint generalmente representa un recurso
-    específico o una colección de recursos. Por ejemplo:
-
-### Solicitudes HTTP
-
-Las solicitudes HTTP son mensajes enviados desde el cliente al
-servidor para pedirle que realice alguna acción. Existen varios
-tipos de solicitudes, pero los más comunes son:
-
-- **POST:** Envía datos al servidor para que se creen nuevos
-  recursos. (Create)
-- **GET:** Solicita datos del servidor. (Read)
-- **PUT:** Actualiza un recurso existente en el servidor. (Update)
-- **PATCH:** Se utiliza para actualizar parcialmente un recurso
-  existente. A diferencia de PUT, que reemplaza todo el recurso,
-  PATCH solo actualiza los campos especificados.
-- **DELETE:** Elimina un recurso del servidor. (Delete)
-
-La elección entre Put y Patch dependerá de ustedes, cuando se
-tienen tablas con 1000 columnas, puede ser más práctico sólo
-actualizar un campo especifico que actualizar toda la fila
-aunque de todas formas sólo se actualice un dato, pero en el
-caso de estancia puede ser irrelevante, y se podría usar PUT
-pa' to' jajaja
-
-### Cabeceras HTTP
-
-Las cabeceras HTTP (o headers en inglés) son elementos que se
-envían en las solicitudes y respuestas HTTP para proporcionar
-información adicional sobre la comunicación. Estas cabeceras
-ayudan a los servidores y clientes a entender cómo manejar la
-solicitud o la respuesta, y a intercambiar información relevante
-sobre el contenido, la autenticación, el tipo de conexión, entre
-otros aspectos.
-
-Dentro de estas cabeceras puede venir información del equipo
-del cliente, la forma en el que te están enviando, o en el caso
-del log-in puede venir un token que indique si está autenticado
-o no, les toca investigar eso porque no logro resumir la info
-porque ns qué más hacen jajaja
-
-También viene información del servidor al momento de la respuesta,
-el formato, si el servidor envía una cookie, etc.
-
-### Respuestas HTTP
-
-Las respuestas HTTP son los mensajes que el servidor envía de
-vuelta al cliente después de procesar una solicitud. Incluyen un
-código de estado que indica el resultado de la operación. Algunos
-códigos comunes son:
-
-- 200 OK: La solicitud se procesó correctamente.
-- 201 Created: Un nuevo recurso se creó con éxito.
-- 400 Bad Request: La solicitud no se pudo entender.
-- 404 Not Found: El recurso solicitado no se encontró.
-- 500 Internal Server Error: Hubo un error en el servidor al
-  procesar la solicitud.
-
-El código definido ya tiene un significado dado, es decir cualquier
-error 404 significa que el recurso no se encontró, si necesitan
-marcar algún error en específico pueden hacer uso de estos además
-están estandarizados, no se asusten si ven alguno raro como mi favorito:
-
-#### 418 Soy una tetera
-
-El código de error HTTP 418 Soy una tetera indica que el servidor se
-rehusa a preparar café porque es una tetera. Este error es una
-referencia al Hyper Text Coffee Pot Control Protocol, creado como
-parte de una broma del April Fools' de 1998.
-
-Una página que tiene documentación sobre los códigos http, etiquetas
-HTML e incluso propiedades de estilos CSS, existe una página llamada
-[MDN web docs](https://developer.mozilla.org/es/), vayan a su sección de
-"References"
-
-### Rutas
-
-Las rutas son las URLs a las que se puede acceder en una API. Cada
-ruta generalmente corresponde a un recurso específico. Por ejemplo:
-
-- `GET /usuarios:` Obtener una lista de usuarios.
-- `POST /usuarios:` Crear un nuevo usuario.
-- `PUT /usuarios/1:` Actualizar el usuario con ID 1.
-- `DELETE /usuarios/1:` Eliminar el usuario con ID 1.
-
-Estas rutas se definen en el código de tu API y son tus endpoints.
-
-Dentro de estas rutas puedes pasar argumentos que corresponden
-a tu info, de ahi que se vean urls como
-`search?client=firefox-b-d&q=expressjs`, corresponde a una busqueda
-en google, donde envìo mi navegador, firefox y mi busqueda, expressjs
-
-Estos argumentos corresponde a una función real en tu código, no
-creo que se escriba así pero normalmente. En esta se suele definir
-el tipo de solicitud HTTP y la ruta, en este caso les mostraré un
-endpoint GET en distintos lenguajes y frameworks.
-
-Ejemplo en Java framework Spring Boot
-
-```Java
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-@RestController
-public class ClientController {
-
-    @GetMapping("/clients")
-    public String getClientInfo(
-            @RequestParam String nombre,
-            @RequestParam String apellido,
-            @RequestParam int edad) {
-
-        // Aquí podrías procesar la información como necesites
-        return String.format("Cliente: %s %s, Edad: %d", nombre, apellido, edad);
-    }
-}
-```
-
-En lenguaje Rust con framework Arctix Web
-
-```rust
-use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
-
-//Endpoint
-#[get("/clients")]
-async fn get_client_info(query: web::Query<ClientQuery>) -> impl Responder {
-    let nombre = &query.nombre;
-    let apellido = &query.apellido;
-    let edad = query.edad;
-
-    // Procesar la información recibida
-    HttpResponse::Ok().body(format!("Cliente: {} {}, Edad: {}", nombre, apellido, edad))
-}
-
-// Cosas extra del framework
-#[derive(serde::Deserialize)]
-struct ClientQuery {
-    nombre: String,
-    apellido: String,
-    edad: u32,
-}
-
-#[actix_web::main]
-async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| {
-        App::new()
-            .service(get_client_info) // Registra el endpoint
-    })
-    .bind("127.0.0.1:8080")? // Escucha en el puerto 8080
-    .run()
-    .await
-}
-```
-
-Ejemplo en javascript con framework Express
-
-```javascript
-const express = require("express");
-const app = express();
-const PORT = 3000;
-
-// Definición del endpoint
-app.get("/clients", (req, res) => {
-  const { nombre, apellido, edad } = req.query;
-
-  // Procesar la información recibida
-  if (!nombre || !apellido || !edad) {
-    return res
-      .status(400)
-      .send("Faltan parámetros: nombre, apellido y edad son requeridos.");
-  }
-
-  res.send(`Cliente: ${nombre} ${apellido}, Edad: ${edad}`);
-});
-
-// Iniciar el servidor
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`);
-});
-```
-
-Ejemplo de cómo quedaría la solicitud en url
-
-```
-http://localhost:8080/clients?nombre=Juan&apellido=Pérez&edad=30
-```
-
-### Middleware
-
-El middleware es un componente que se encuentra entre la solicitud
-y la respuesta en una aplicación web. Puede realizar tareas como la
-autenticación, el registro de solicitudes, el manejo de errores, etc.
-
-El middleware permite modificar la solicitud o la respuesta antes de
-que lleguen al controlador final.
-
-### Servir archivos estáticos o dinámicos
-
-- **Archivos estáticos:** Son archivos que no cambian y se envían tal
-  como están al cliente. Ejemplos incluyen imágenes, hojas de estilo
-  CSS y archivos JavaScript. Se suelen servir directamente desde el
-  servidor sin procesar.
-
-- **Archivos dinámicos:** Son generados en tiempo real por el
-  servidor en función de la solicitud del cliente. Por ejemplo, una
-  página web que muestra información de un usuario específico se
-  genera dinámicamente al acceder a su URL.
-
-### JSON
-
-JSON (JavaScript Object Notation) es un formato ligero
-de intercambio de datos que es fácil de leer y escribir
-para los humanos, y fácil de analizar y generar para
-las máquinas. Se utiliza comúnmente para transmitir
-datos entre un servidor y un cliente en aplicaciones web.
-
-#### **Características:**
-
-- **Formato de Texto:** JSON es un formato de texto
-  que se puede enviar y recibir a través de la red,
-  y puede ser leído y escrito en muchos lenguajes de
-  programación.
-- **Estructura de Datos:** JSON representa datos
-  estructurados en forma de pares clave-valor, similares
-  a un objeto en JavaScript. Esta estructura lo hace
-  intuitivo y fácil de entender.
-- **Soporte Multilenguaje:** Aunque JSON se deriva de
-  JavaScript, es compatible con muchos otros lenguajes
-  de programación, como Python, Java, C#, y más.
-
-#### Sintaxis
-
-- **Objetos:** Se definen con llaves `{}` y pueden tener
-  pares clave-valor
-
-**Ejemplo:**
-
-```json
-{
-  "nombre": "Juan",
-  "edad": 30
-}
-```
-
-- **Arreglos:** Se definen mediante corchetes `[]` y
-  pueden contener multiples valores
-
-**Ejemplo:**
-
-```json
-{
-  "nombres": ["Juan", "María", "Pedro"]
-}
-```
-
-Con este formato podemos guardar incluso arreglos
-de objetos o incluso contener dentro del mismo
-archivo objetos de diferente tipo, o incluso objetos
-que sus atributos son objetos, muchas posibilidades.
-
-```json
-{
-  "personas": [
-    {
-      "nombre": "Juan",
-      "edad": 15
-    },
-    {
-      "nombre": "Ana",
-      "edad": 15
-    },
-    {
-      "nombre": "Polo",
-      "edad": 27
-    }
-  ],
-  "mascotas": [
-    {
-      "nombre": "Koda"
-    },
-    {
-      "nombre": "Indiana"
-    },
-    {
-      "nombre": "Reese"
-    },
-    {
-      "nombre": "Tasmi"
-    },
-    {
-      "nombre": "Sisi"
-    }
-  ]
-}
-```
-
-### CURL
-
-cURL (Client for URLs) es una herramienta de línea de comandos
-que permite transferir datos desde o hacia un servidor. Utiliza
-varios protocolos, siendo HTTP y HTTPS los más comunes. cURL es
-muy útil para realizar pruebas de APIs, descargar archivos, y
-enviar datos.
-
-cURL debería ya venir instalado en windows y listo para usarse
-desde el cmd
-
-#### Uso
-
-Solicitud GET por defecto
-
-```bash
-curl https://api.ejemplo.com/datos
-```
-
-Indicar solicitud especifica con `-X` e indicar el cuerpo
-de la solicitud mediante `-d`.
-
-```bash
-curl -X PUT https://api.ejemplo.com/datos/1 -d "nombre=Juan&edad=31"
-```
-
-Puedes agregar cabeceras con `-H`
-
-```bash
-curl -H "Authorization: Bearer tu_token" https://api.ejemplo.com/datos
-
-```
-
-Incluso podemos mandar un `json` en el cuerpo, se usa `\`
-para indicar saltos de linea sin que se mande el comando
-linea por linea
-
-```bash
-curl -X POST https://api.ejemplo.com/datos \
--H "Content-Type: application/json" \
--d '{"nombre": "Juan", "edad": 30}'
-```
-
-Descargar archivos con `-O`
-
-```bash
-curl -O https://ejemplo.com/archivo.zip
-```
-
-Guardar la respuesta en un archivo con `-o`
-
-```bash
-curl https://api.ejemplo.com/datos -o respuesta.json
-```
-
-A partir de aquí les empezaré a explicar
-conceptos básicos sobre el framework y la
-tecnología que voy a utilizar, pero por
-si se les hace tentativo. Les muestro
-un ejemplo de cómo queda el código de una
-api que les permite enviar texto al servidor
-y este les responde con un `pong`. Este
-es el "hola mundo" de un servidor llamado
-`ping pong`.
-
-```javascript
-// archivo: servidor.js
-// Importar express
-const express = require("express");
-const app = express();
-const PORT = 3000; // Puerto en el que escuchará el servidor
-
-// Definir la ruta para "ping"
-app.get("/ping", (req, res) => {
-  res.send("pong");
-});
-
-// Iniciar el servidor
-app.listen(PORT, () => {
-  console.log(`Servidor de ping-pong ejecutándose en http://localhost:${PORT}`);
-});
-```
-
-Ejemplo de cómo consulto mi servidor y la
-respuesta
-
-```bash
-curl 'http://localhost:3000/ping'
-pong
-```
+   - [Funciones como argumentos](#pasar-funciones-como-argumentos-funciones-anónimas)
+   - [Funciones anónimas](#funciones-anónimas)
+8. [Hola mundo](#el-hola-mundo-de-la-api-ping-pong)
 
 ## ¿Por qué JavaScript?
 
@@ -782,7 +348,7 @@ Ahora inicializamos el proyecto
 npm run tsc -- --init
 ```
 
-## Configuración de typescript
+## Configurar TypeScript
 
 No siempre es obligatorio modificar la configuración
 manual pero para que se sepa qué se está haciendo. En
@@ -1051,6 +617,12 @@ como argumento un apuntador a funcion
 class App {
   constructor() {}
 
+  /**
+   * @param ruta {string} Representa la ruta de
+   * nuestro endpoint o algo así
+   * @param funcionSolicitud {function} una funcion que recibe dos parámetros,
+   * y no hace realmente nada con ellos xd
+   */
   get(ruta, funcionSolicitud) {
     funcionSolicitud(`GET ${ruta}`, "Hello world");
   }
@@ -1082,8 +654,6 @@ Solicitud GET /client, Respuesta Hello world
 
 ## El hola mundo de la API: PING PONG
 
-### Hola mundo
-
 Ahora haremos el hola mundo de nuestra api, crearemos
 una carpeta `src` en la raiz de nuestro proyecto y
 crearemos un archivo `index.ts` y pondremos algo de código
@@ -1100,3 +670,202 @@ crearemos un archivo `index.ts` y pondremos algo de código
 
 **Nota:** Si tu editor de código te marca errores no
 te asustes, en principio diremos cómo se solucionan.
+
+```typescript
+// Importamos express. Debería dar error
+// Cannot find module 'express' or its corresponding type declarations. [2307]
+import express from "express";
+
+const app = express(); //Crear aplicación con express
+
+/* Indicar que la app use el middleware de
+ * express.json que transforma el cuerpo de
+ * la solicitud http a un JSON, de forma que
+ * podemos manipular más facil la solicitud
+ * sin tener que convertir manualmente los
+ * datos de la misma
+ */
+app.use(express.json());
+
+// Definir una constante que corresponda al puerto a usar
+const PORT = 3000;
+
+/**
+ * Definimos nuestro endpoint, definimos con
+ * .get() que es de tipo get, duh, pero recibe
+ * como argumentos la ruta que va a tener, y una
+ * función anónima que determina qué se hará
+ * cuando se consulte esa ruta, esta función
+ * recibe la solicitud (request), supongo que
+ * tendrá info de la misma, y un objeto de
+ * respuesta (response) y de la cual podemos
+ * enviar algo al cliente nuevamente
+ *
+ * Deberíamos recibir un error en los argumentos
+ * de req y res
+ *
+ * Parameter 'req' implicitly has an 'any' type. [7006]
+ * Parameter 'res' implicitly has an 'any' type. [7006]
+ */
+app.get("/ping", (req, res) => {
+  // Imprimimos en la consola del servidor
+  console.log("Some one pinged here");
+
+  console.log(req);
+
+  // Enviamos el texto pong
+  res.send("pong");
+});
+
+/**
+ * ponemos al servidor en "Escucha" (esperando
+ * a que un paquete por red llegue a ese puerto
+ * para procesar la solicitud)
+ */
+app.listen(PORT, () => {
+  console.log(`Servidor en escucha en puerto ${PORT}`);
+});
+```
+
+El error de implicity has an 'any' type significa que
+se indica que el dato no tiene tipo y que podría ser
+cualquier tipo de dato, objeto o estructura de datos,
+esto es como si por defecto en Javascript definimos
+el argumento de una función, y debido a una regla que
+colocamos en TypeScript siempre se debe definir tipos.
+
+En el primer error, indica que no tiene los "tipos" de
+express. Cuando usamos typescript e importamos un paquete
+puede ocurrir que ya hay tipos definidos en el módulo,
+recordando que por defecto en javascript no los hay y
+en su mayoria los modulos están escritos en JS, o que
+no estén y debamos importarlos de forma externa.
+
+A veces hay personas que crean tipos para nosotros y que
+no tengamos problemas.
+
+habrá que buscar si existen para lo que necesitamos, como
+es el caso de express, pero en caso de que no haya, supongo
+que la solución es quitar la regla de "strict = true" y colocar
+todas las normas individuales de strict omitiendo el implicit
+any
+
+Para expres haremos
+
+```bash
+npm install @types/express -D
+```
+
+Con esto los 3 errores se eliminarían pero ahora obtenemos otro
+en `req` 'req' is declared but its value is never read. [6133]
+este error indica que estamos definiendo una variable que no
+se usa, para cuando son variables nuestras es util, pero cuando
+son de algo más como es en este caso, podemos omitir el warning
+colocando un guión bajo `_` antes del nombre de la variable
+o directamente sustituir el nombre de la variable por un `_`
+
+```typescript
+app.get("/ping", (_req, res) => {
+  // Imprimimos como
+  console.log("Some one pinged here");
+
+  // Enviamos el texto pong
+  res.send("pong");
+});
+```
+
+Ahora hay que transpilar el programa
+
+```bash
+npm run  tsc
+```
+
+Las carpetas del proyecto deberían ser
+
+```
+.
+├── build
+│   └── index.js
+├── eslint.config.mjs
+├── package-lock.json
+├── package.json
+├── src
+│   └── index.ts
+└── tsconfig.json
+```
+
+Ahora deberíamos poder ver la carpeta de `build` dentro de la
+cual tendríamos que ver nuestra misma distribucion de carpetas
+y archivos de `src` pero colocando nuestros archivos `.ts` a
+`.js` otros archivos como `.html` o cualquier otro no se
+colocarán en build, cualquier cosa que hayamos hecho y queramos
+usar como importar el codigo escrito de TS en un html, tendremos
+que referenciar el archivo JS transpilado en la carpeta build
+
+Ahora vamos a poner en marcha el servidor
+
+```bash
+npm install # Instalar todas las dependencias en caso de no tenerlas
+node build/index.js # Ejecutar nuestro script de JS
+```
+
+el último comando podría colocarse como un `script` para ejecutarse
+con `npm run` pero por ahora así que se quede jajaj, deberíamos ver
+el mensaje de "Servidor en escucha en el puerto 3000" y abriendo un
+navegador web y escribiendo `http://localhost:3000/ping` deberiamos ver
+`pong` escrito, o si usamos `curl` también.
+
+En la terminal del cliente
+
+```bash
+curl http://localhost:3000/ping
+pong
+```
+
+En la terminal del servidor
+
+```bash
+node build/index.js
+Servidor en escucha en puerto 3000
+Some one pinged here
+```
+
+Ahora para poder ir desarrollando y viendo los cambios
+tendríamos que eliminar la carpeta `build` a cada cambio
+y compilando nuevamente, sin embargo esto es tardado, y
+existe una dependencia que nos permite ejecutar una vez
+el proyecto y cada que hagamos un cambio que se re compile
+solo
+
+Definiremos dos scripts, `start` para que se ejecute por
+defecto nuestro archivo, cuando pongamos en uso de forma
+oficial el sistema este es el comando que ejecutaremos
+y un script `dev` que será el que recompile todo cada que
+hagamos un cambio.
+
+En nuestro `package.json` agregaremos ambos scripts
+
+```json
+{
+  "scripts": {
+    "start": "node build/index.js",
+    "dev": "ts-node-dev src/index.ts",
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
+```
+
+Como ven, colocamos un `ts-node-dev` esta es la dependencia
+que nos va a recompilar y ejecutar esto, pero debemos
+instalarla
+
+```bash
+npm install ts-node-dev -D
+```
+
+De esta forma pueden abrir una terminal de vscode, ejecutar
+`npm run dev` y cada que hagan un cambio y o guarden se
+volverá a ejecutar el programa, intenté yo con mi terminal
+en linux pero sólo jala con la terminal del vscode, ni idea 
+de pq xd.
