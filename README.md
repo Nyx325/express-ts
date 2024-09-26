@@ -7,6 +7,9 @@ a mis notas sobre hacer una API en Express con JS y TS
 
 ## Indice
 
+1. [Cómo ejecutar el proyecto](#cómo-ejecutar-el-proyecto)
+2. [Notas](#notas)
+
 ## Cómo ejecutar el proyecto
 
 ### Prerequisitos
