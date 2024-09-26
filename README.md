@@ -21,6 +21,18 @@ a mis notas sobre hacer una API en Express con JS y TS
 
 ### Poner en marcha
 
+Definir el archivo `.env` ejemplo
+
+```
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=barberia
+DB_CONN_LIMIT=5
+
+PAGE_SIZE=25
+```
+
 Si vas a desplegar este sistema en algún servidor y
 ya cuentas con `Node.js`.
 
