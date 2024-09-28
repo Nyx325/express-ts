@@ -1,22 +1,20 @@
 import { Request, Response } from "express";
-import { Client } from "../models/clientModel";
+import { NewClient } from "../models/clientModel";
 import { ClientRepository } from "../repository/clientRepository";
 
 export const createClient = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  let client;
-  // Validar campos
-  try {
-    const { clientName, clientLastName, clientBirthDay } = req.body;
-    client = new Client(undefined, clientName, clientLastName, clientBirthDay);
-  } catch (error) {
-    res.status(400).json({ code: 400, error: `${error}` });
-    res.send();
-    return;
+  const { clientName, clientLastName, clientBirthDay } = req.body;
+
+  if (clientName === "" || clientLastName === "") {
+    res
+      .status(400)
+      .json({ code: 400, error: "Client name or lastname must be defined" });
   }
 
+  const client: NewClient = { clientName, clientLastName, clientBirthDay };
   const repo = new ClientRepository();
 
   try {

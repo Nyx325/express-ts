@@ -1,47 +1,44 @@
-import { Client } from "../models/clientModel";
+import { Client, NewClient } from "../models/clientModel";
 import pool from "./dbPool";
 import dotenv from "dotenv";
-export class ClientRepository {
-  async add(client: Client): Promise<void> {
+import { Repository } from "./repository";
+// Cargar variables de entorno una sola vez al principio
+dotenv.config();
+
+export class ClientRepository extends Repository {
+  // Agregar cliente a la base de datos
+  async add(client: NewClient): Promise<void> {
     const conn = await pool.getConnection();
     const query =
       "INSERT INTO clients (client_name, client_lastname, client_birthday) VALUES (?,?,?);";
-
-    await conn.query(query, [
-      client.clientName,
-      client.clientLastName,
-      client.clientBirthDay,
-    ]);
-
-    if (conn) conn.release();
+    try {
+      await conn.query(query, [
+        client.clientName,
+        client.clientLastName,
+        client.clientBirthDay,
+      ]);
+    } finally {
+      if (conn) conn.release();
+    }
   }
 
+  // Obtener lista de clientes paginada
   async getClients(pageNumber: number): Promise<Client[]> {
     if (!Number.isInteger(pageNumber)) {
-      throw Error("Page number must be an integer");
+      throw new Error("Page number must be an integer");
     }
 
-    dotenv.config();
-    const pageSizeEnvVar = process.env.PAGE_SIZE;
-
-    if (pageSizeEnvVar === undefined)
-      throw Error("PAGE_SIZE variable isn't set on .env file");
-
-    if (!Number.isInteger(Number(pageSizeEnvVar)))
-      throw Error("PAGE_SIZE must be an interger");
-
-    const pageSize = Number(pageSizeEnvVar);
-
+    const pageSize = this.getPageSize();
     const offset = (pageNumber - 1) * pageSize;
 
-    const conn = await pool.getConnection();
     const query =
       "SELECT client_name, client_lastname, client_birthday FROM clients LIMIT ? OFFSET ?;";
-
-    const rows = await conn.query(query, [pageSize, offset]);
-
-    if (conn) conn.release();
-
-    return rows as Client[];
+    const conn = await pool.getConnection();
+    try {
+      const rows = await conn.query(query, [pageSize, offset]);
+      return rows as Client[];
+    } finally {
+      if (conn) conn.release();
+    }
   }
 }

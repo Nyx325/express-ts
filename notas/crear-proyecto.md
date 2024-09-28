@@ -553,13 +553,13 @@ const app = new App();
 
 console.log("-------- Forma 1 -------");
 
-app.get("/client", function (req, res) {
-  console.log(`Solicitud ${req}, Respuesta ${res}`);
+app.get("/client", function (request, response) {
+  console.log(`Solicitud ${request}, Respuesta ${response}`);
 });
 
 console.log("-------- Forma 2 -------");
-app.get("/client", (req, res) => {
-  console.log(`Solicitud ${req}, Respuesta ${res}`);
+app.get("/client", (request, response) => {
+  console.log(`Solicitud ${request}, Respuesta ${response}`);
 });
 ```
 
@@ -628,14 +628,14 @@ const PORT = 3000;
  * Parameter 'req' implicitly has an 'any' type. [7006]
  * Parameter 'res' implicitly has an 'any' type. [7006]
  */
-app.get("/ping", (req, res) => {
+app.get("/ping", (request, response) => {
   // Imprimimos en la consola del servidor
   console.log("Some one pinged here");
 
-  console.log(req);
+  console.log(request);
 
   // Enviamos el texto pong
-  res.send("pong");
+  response.send("pong");
 });
 
 /**
@@ -686,7 +686,7 @@ colocando un guión bajo `_` antes del nombre de la variable
 o directamente sustituir el nombre de la variable por un `_`
 
 ```typescript
-app.get("/ping", (_req, res) => {
+app.get("/ping", (_request, response) => {
   // Imprimimos como
   console.log("Some one pinged here");
 

@@ -45,10 +45,9 @@ src
   a la base de datos, ese archivo `dbPool.ts`.
 - **Controller:** En esta parte crearemos una
   clase que reciba la solicitud HTTP, la convierta
-  la solicitud HTTP a un objeto y debería validarlo
-  también, aunque yo personalmente lo haré en models.
-  Lo pondremos en funciones pero no haremos que sean
-  rutas.
+  la solicitud HTTP a un objeto y validarlo, aunque
+  también podríamos llegar a validarlo directamente
+  en models.
 - **Routes:** Aquí directamente asosiaremos las
   funciones con rutas.
 - **App.ts:** Pondremos todas las rutas de distintas
@@ -276,7 +275,7 @@ de entorno `DB_CONN_LIMIT` es el número de conexiones
 que abrimos, sinceramente no sé cuál es el número apropiado
 pero pondré 5 xd.
 
-### Ventajas
+#### Ventajas
 
 - **Eficiencia:** Reducen el costo de crear y destruir hilos
   o conexiones repetidamente.
@@ -285,3 +284,8 @@ pero pondré 5 xd.
   que se sobrecargue el sistema.
 - **Reutilización:** Los recursos pueden ser reutilizados, lo
   que optimiza el rendimiento general de la aplicación.
+
+De esta forma en nuestro `.env` podemos modificar estos parámetros
+sin necesidad de alterar el código.
+
+## Modelo, ¿Clase o Interfaz?

@@ -7,7 +7,7 @@ a mis notas sobre hacer una API en Express con JS y TS
 
 ## Indice
 
-1. [Cómo ejecutar el proyecto](#cómo-ejecutar-el-proyecto)
+1. [Cómo ejecutar el proyecto](./notas/#cómo-ejecutar-el-proyecto)
 2. [Notas](#notas)
 
 ## Cómo ejecutar el proyecto
@@ -54,5 +54,7 @@ npm run dev
 Sí sólo vienes por las notas de Backend, recomiendo mirar las
 extenciones que recomiendo en [Creando un proyecto](./crear-proyecto.md#prerequisitos-para-el-proyecto) para VSCode.
 
-1. [Conceptos básicos para backend](./conceptos-basicos.md)
-2. [Creando un proyecto de Express con JS y TS](./crear-proyecto.md)
+1. [Conceptos básicos para backend](./notas/conceptos-basicos.md)
+2. [Creando un proyecto de Express con JS y TS](./notas/crear-proyecto.md)
+3. [Tipos, clases e interfaces](./notas/tipos-clases-interfaces.md)
+4. [CRUD básico](./notas/crud-basico.md)
