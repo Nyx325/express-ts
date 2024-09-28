@@ -11,7 +11,7 @@ export const createClient = async (
   if (clientName === "" || clientLastName === "") {
     res
       .status(400)
-      .json({ code: 400, error: "Client name or lastname must be defined" });
+      .json({ code: 400, error: "Client name and lastname must be defined" });
   }
 
   const client: NewClient = { clientName, clientLastName, clientBirthDay };

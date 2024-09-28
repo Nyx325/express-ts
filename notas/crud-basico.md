@@ -289,3 +289,119 @@ De esta forma en nuestro `.env` podemos modificar estos parámetros
 sin necesidad de alterar el código.
 
 ## Modelo, ¿Clase o Interfaz?
+
+Como ya vimos en [Tipos, clases e interfaces](./tipos-clases-interfaces.md)
+podemos definir tipos de muchas formas, y para decidir
+cual usar depende de si vamos a definir métodos o no,
+si vamos a manejar unicamente valores, una interfaz es
+más que suficiente, si vamos a usar métodos o incluso
+validar datos, entonces podríamos usar una clase
+
+Ejemplo con interfaz y la que usaré
+
+```typescript
+export interface Client {
+  clientId: number;
+  clientName: string;
+  clientLastName: string;
+  clientBirthDay: Date;
+}
+
+export type NewClient = Omit<Client, "clientId">;
+```
+
+Con esto ya puedo manejar mi entidad de cliente e incluso
+definí un tipo de nuevo usuario para cuando se vayan a
+insertar datos, y así considero que es más entendible al
+momento de crear un objeto que con el constructor de la
+clase, pero esto es a gusto personal
+
+Si planeas usar una clase puedes incluso validar los datos
+desde un inicio en su constructor, lanzando una excepcion
+en caso de que no sean válidos
+
+```typescript
+class Persona {
+  public clientId: number;
+  public clientName: string;
+  public clientLastName: string;
+  public clientBirthDay: Date;
+
+  constructor(id: number, nombre: string, apellido: string, cum: Date) {
+    if (nombre === "" || apellido === "")
+      throw Error("Se debe definir un nombre o apellido");
+
+    if (!Number.isInteger(id)) throw Error("El id no puede tener decimales");
+
+    this.clientId = id;
+    this.clientName = nombre;
+    this.clientLastName = apellido;
+    this.clientBirthDay = cum;
+  }
+}
+```
+
+Podría ser util, sobre todo porque al momento de crear el
+controlador pasas de esto:
+
+```typescript
+// Función que agrega un nuevo dato
+export const createClient = async (req, res): Promise<void> => {
+  const { clientName, clientLastName, clientBirthDay } = req.body;
+
+  // Validacion
+  if (clientName === "" || clientLastName === "") {
+    res
+      .status(400)
+      .json({ code: 400, error: "Client name or lastname must be defined" });
+  }
+
+  const client: NewClient = { clientName, clientLastName, clientBirthDay };
+
+  // Resto del código
+  const repo = new ClientRepository();
+
+  try {
+    await repo.add(client);
+    res.status(201).json({ code: 201, message: "Client created succesfuly" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ code: 500, error: `Error while creating client: ${error}` });
+  }
+};
+```
+
+A escribir esto, se reduce a un simple try-catch pero la diferencia
+es que al usar los utility types definimos tipos, no clases, por lo
+que aunque usaramos `NewClient` usando un utility type, no tendriamos
+un constructor, nuevamente, va a gustos.
+
+```typescript
+export const createClient = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const { clientName, clientLastName, clientBirthDay } = req.body;
+
+  let client: Client;
+  // Validacion
+  try {
+    client = new Client(0, clientName, clientLastName, clientBirthDay);
+  } catch (error) {
+    res.status(400).json({ code: 400, error: error });
+  }
+
+  // Resto del código
+  const repo = new ClientRepository();
+
+  try {
+    await repo.add(client);
+    res.status(201).json({ code: 201, message: "Client created succesfuly" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ code: 500, error: `Error while creating client: ${error}` });
+  }
+};
+```
